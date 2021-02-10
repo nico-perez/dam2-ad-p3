@@ -4,16 +4,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
 
+import dev.el_nico.dam2_ad_p3.modelo.Asignatura;
 import dev.el_nico.dam2_ad_p3.modelo.Centro;
+import dev.el_nico.dam2_ad_p3.modelo.Profesor;
 
 public final class Main {
+
+    private static ODB db;
+
     private Main() {}
 
     public static void main(String[] args) {
-        ODB db = ODBFactory.open("src/main/resources/base_de_datos.txt");
+        db = ODBFactory.open("src/main/resources/base_de_datos.txt");
         try {
-
-            db.store(new Centro(1, "un centro", "un director", "una direccion", "una localidad", "una provincia"));
 
             int orden = 0;
             do {
@@ -38,8 +41,8 @@ public final class Main {
 
     private static void acatar(int orden) {
         switch(orden) {
-            case 0:
-            case 1:
+            case 0: return;
+            case 1: poblarBaseDeDatos(); break;
             case 2:
             case 3:
             case 4:
@@ -47,6 +50,18 @@ public final class Main {
             case 6:
             case 7:
             default: break;
+        }
+    }
+
+    private static void poblarBaseDeDatos() {
+        for (Asignatura a : Datos.getAsignaturas()) {
+            db.store(a);
+        }
+        for (Centro c : Datos.getCentros()) {
+            db.store(c);
+        }
+        for (Profesor p : Datos.getProfesores()) {
+            db.store(p);
         }
     }
 

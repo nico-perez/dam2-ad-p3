@@ -1,22 +1,28 @@
 package dev.el_nico.dam2_ad_p3.modelo;
 
+import java.util.List;
+
 public class Centro {
+    
     private int codigo;
     private String nombre;
-    private String director;
     private String direccion;
     private String localidad;
     private String provincia;
 
+    private Profesor director;
+    private List<Profesor> profesoresDelCentro;
+
     public Centro() {}
     
-    public Centro(int codigo, String nombre, String director, String direccion, String localidad, String provincia) {
+    public Centro(int codigo, String nombre, Profesor director, String direccion, String localidad, String provincia,List<Profesor> profesoresDelCentro) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.director = director;
         this.direccion = direccion;
         this.localidad = localidad;
         this.provincia = provincia;
+        this.profesoresDelCentro = profesoresDelCentro;
     }
 
     public int getCodigo() {
@@ -35,11 +41,11 @@ public class Centro {
         this.nombre = nombre;
     }
 
-    public String getDirector() {
+    public Profesor getDirector() {
         return director;
     }
 
-    public void setDirector(String director) {
+    public void setDirector(Profesor director) {
         this.director = director;
     }
 
@@ -66,6 +72,14 @@ public class Centro {
     public void setProvincia(String provincia) {
         this.provincia = provincia;
     }    
+
+    public List<Profesor> getProfesoresDelCentro() {
+        return profesoresDelCentro;
+    }
+
+    public void setProfesoresDelCentro(List<Profesor> profesoresDelCentro) {
+        this.profesoresDelCentro = profesoresDelCentro;
+    }
 
     public static class Codigo {
         private Codigo() {}

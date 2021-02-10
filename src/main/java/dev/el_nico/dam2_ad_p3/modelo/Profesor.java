@@ -7,18 +7,16 @@ public class Profesor {
     private String apellidos;
     private String sexo;
     private String fechaNacimiento;
-    private Centro centro;
 
     public Profesor() {
     }
 
-    public Profesor(int codigo, String nombre, String apellidos, String sexo, String fechaNacimiento, Centro centro) {
+    public Profesor(int codigo, String nombre, String apellidos, String sexo, String fechaNacimiento) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.sexo = sexo;
         this.fechaNacimiento = fechaNacimiento;
-        this.centro = centro;
     }
 
     public int getCodigo() {
@@ -59,13 +57,5 @@ public class Profesor {
 
     public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public Centro getCentro() {
-        return centro;
-    }
-
-    public void setCentro(Centro centro) {
-        this.centro = centro;
     }
 }

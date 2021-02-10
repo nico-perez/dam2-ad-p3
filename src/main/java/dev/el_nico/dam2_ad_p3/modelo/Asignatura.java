@@ -1,14 +1,18 @@
 package dev.el_nico.dam2_ad_p3.modelo;
 
+import java.util.List;
+
 public class Asignatura {
     private int codigo;
     private String nombre;
+    private List<Profesor> profesoresQueLaImparten;
 
     public Asignatura() {}
 
-    public Asignatura(int codigo, String nombre) {
+    public Asignatura(int codigo, String nombre, List<Profesor> profesoresQueLaImparten) {
         this.codigo = codigo;
         this.nombre = nombre;
+        this.profesoresQueLaImparten = profesoresQueLaImparten;
     }
 
     public int getCodigo() {
@@ -25,5 +29,13 @@ public class Asignatura {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public List<Profesor> getProfesoresQueLaImparten() {
+        return profesoresQueLaImparten;
+    }
+
+    public void setProfesoresQueLaImparten(List<Profesor> profesoresQueLaImparten) {
+        this.profesoresQueLaImparten = profesoresQueLaImparten;
     }
 }
