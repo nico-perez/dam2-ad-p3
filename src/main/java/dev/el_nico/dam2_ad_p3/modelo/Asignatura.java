@@ -3,7 +3,7 @@ package dev.el_nico.dam2_ad_p3.modelo;
 import java.util.List;
 
 public class Asignatura {
-    private int codigo;
+    private Integer codigo;
     private String nombre;
     private List<Profesor> profesoresQueLaImparten;
 
@@ -15,7 +15,7 @@ public class Asignatura {
         this.profesoresQueLaImparten = profesoresQueLaImparten;
     }
 
-    public int getCodigo() {
+    public Integer getCodigo() {
         return codigo;
     }
 

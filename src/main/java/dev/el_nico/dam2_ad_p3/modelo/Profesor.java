@@ -2,7 +2,7 @@ package dev.el_nico.dam2_ad_p3.modelo;
 
 public class Profesor {
     
-    private int codigo;
+    private Integer codigo;
     private String nombre;
     private String apellidos;
     private String sexo;
@@ -19,7 +19,7 @@ public class Profesor {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public int getCodigo() {
+    public Integer getCodigo() {
         return codigo;
     }
 
@@ -57,5 +57,13 @@ public class Profesor {
 
     public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(" - Profesor: ").append(codigo).append("\n   Nombre: ").append(nombre)
+                .append(" ").append(apellidos).append("\n   Género: ").append(sexo).append("\n   Fecha nacimiento: ")
+                .append(fechaNacimiento);
+        return sb.toString();
     }
 }

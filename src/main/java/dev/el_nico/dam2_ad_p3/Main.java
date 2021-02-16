@@ -1,8 +1,13 @@
 package dev.el_nico.dam2_ad_p3;
 
+import java.io.File;
+
 import org.apache.commons.lang3.StringUtils;
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.Objects;
+import org.neodatis.odb.core.query.criteria.Where;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
 import dev.el_nico.dam2_ad_p3.modelo.Asignatura;
 import dev.el_nico.dam2_ad_p3.modelo.Centro;
@@ -43,17 +48,95 @@ public final class Main {
         switch(orden) {
             case 0: return;
             case 1: poblarBaseDeDatos(); break;
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
+            case 2: listarTodosLosCentros(); break;
+            case 3: listarTodosLosProfesores(); break;
+            case 4: listarTodosLosProfesDeUnCentro(); break;
+            case 5: listarProfesoresDeUnCentroNacidosAntesDe1993(); break;
+            case 6: listarProfesoresDeSexoMasculinoQueImpartenAD(); break;
+            case 7: comprobarQueUnProfesorYaExiste(); break;
             default: break;
         }
     }
 
+    private static void comprobarQueUnProfesorYaExiste() {
+        int codigo = pedirEntero("Códido del profesor", false);
+        Objects<Profesor> profes = db.getObjects(new CriteriaQuery(Profesor.class, Where.equal("codigo", codigo)));
+        if (profes.size() == 1) {
+            for (Profesor profesor : profes) {
+                System.out.println(profesor);
+            }
+        } else if (profes.size() > 1) {
+            System.out.println("Hay profesores con clave duplicada: " + codigo);
+        } else {
+            System.out.println("No existe ningún profesor con esa clave");
+        }
+    }
+
+    private static void listarProfesoresDeSexoMasculinoQueImpartenAD() {
+        Asignatura AD = (Asignatura) 
+                db.getObjects(new CriteriaQuery(Asignatura.class,
+                Where.and().add(Where.isNotNull("codigo")).add(Where.equal("nombre", "Acceso a Datos")))).getFirst();
+        
+        Objects<Profesor> profes = db.getObjects(new CriteriaQuery(Profesor.class, Where.and().add(Where.equal("sexo", "M"))));
+        for (Profesor profesor : profes) {
+            if (AD.getProfesoresQueLaImparten().contains(profesor)) {
+                System.out.println(profesor);
+            }
+        }
+    }
+
+    private static void listarProfesoresDeUnCentroNacidosAntesDe1993() {
+        String s = pedirString("Nombre del centro", false);
+        Objects<Centro> centro = db.getObjects(new CriteriaQuery(Centro.class, Where.equal("nombre", s)));
+
+        if (centro.size() < 1) {
+            System.out.println("No hay ningún centro con ese nombre");
+            return;
+        }
+        Centro c = centro.getFirst();
+        for (Profesor p : c.getProfesoresDelCentro()) {
+            try {
+                String[] splitted = p.getFechaNacimiento().split("-");
+                if (Integer.parseInt(splitted[splitted.length-1]) < 1993) {
+                    System.out.println("\n" + p);
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void listarTodosLosProfesDeUnCentro() {
+        String s = pedirString("Nombre del centro", false);
+        Objects<Centro> centro = db.getObjects(new CriteriaQuery(Centro.class, Where.equal("nombre", s)));
+
+        if (centro.size() < 1) {
+            System.out.println("No hay ningún centro con ese nombre");
+            return;
+        }
+        Centro c = centro.getFirst();
+        for (Profesor p : c.getProfesoresDelCentro()) {
+            System.out.println("\n" + p);
+        }
+    }
+
+    private static void listarTodosLosProfesores() {
+        Objects<Profesor> profes = db.getObjects(Profesor.class);
+
+        profes.forEach(o -> System.out.println("\n" + o));
+    }
+
+    private static void listarTodosLosCentros() {
+        Objects<Centro> centros = db.getObjects(new CriteriaQuery(Centro.class, Where.isNotNull("codigo")));
+        centros.forEach(o -> System.out.println("\n" + o));
+    }
+
     private static void poblarBaseDeDatos() {
+        // priomero elimina la movida
+        db.close();
+        new File("src/main/resources/base_de_datos.txt").delete();
+        // despues la crea otra vez y la rellena
+        db = ODBFactory.open("src/main/resources/base_de_datos.txt");
         for (Asignatura a : Datos.getAsignaturas()) {
             db.store(a);
         }
